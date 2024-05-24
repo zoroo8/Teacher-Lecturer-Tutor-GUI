@@ -340,12 +340,23 @@ public class TeacherGUI{
                         int lectworkhr=Integer.parseInt(workhr1.getText());
                         String lectdep= dep1.getText();
                         int lectyoe=Integer.parseInt(yoe1.getText());
-                        
+                        boolean idExists = false;
+                        //checking whether id validation
+                        for (Teacher user : teachers) {
+                            if (user.getTeacherId() == lectid) {
+                                idExists = true;
+                                break;
+                            }
+                        }
+                        if(idExists) {
+                        JOptionPane.showMessageDialog(secframe, "ID already exists. Please enter a unique ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
                         Lecturer lec= new Lecturer(lectid,lectname,lectadd,lectworkty,lectempsta,lectworkhr,lectdep,lectyoe);
                         teachers.add(lec);
 
                         JOptionPane.showMessageDialog(secframe, "Registered successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
                     }
+                    }   
                     catch(NumberFormatException e101){
                         JOptionPane.showMessageDialog(secframe, "Please enter valid numeric values for ID, working hours and year of experience.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -368,7 +379,7 @@ public class TeacherGUI{
                 GridBagConstraints constraints= new GridBagConstraints();
                 constraints.fill= GridBagConstraints.HORIZONTAL;
                 constraints.insets= new Insets(10,10,10,10);
-                    
+                
                 //components
                 JLabel gaDesc = new JLabel("Grade Assignment");
                 gaDesc.setFont(new Font("Arial", Font.BOLD, 17));
@@ -774,21 +785,33 @@ public class TeacherGUI{
                         String tutspec= spec2.getText();
                         String tutacaqua= acaqua2.getText();
                         int tutperfind=0;
-                        try {
-                            String value = (String) perfind2.getSelectedItem();
-                            tutperfind = Integer.parseInt(value);
-                        } catch (NumberFormatException num103) {
-                            JOptionPane.showMessageDialog(perfind2,"Enter correct input!","OK",JOptionPane.WARNING_MESSAGE);
+                        boolean idExists=false;
+                        for (Teacher user : teachers) {
+                            if (user.getTeacherId() == tutid) {
+                                idExists = true;
+                                break;
+                            }
                         }
-                        
-                        Tutor tut= new Tutor(tutid,tutname,tutadd,tutworkty,tutempsta,tutworkhr,tutsal,tutspec,tutacaqua,tutperfind);
-                        teachers.add(tut);
-
-                        JOptionPane.showMessageDialog(thirframe, "Registered successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        if(idExists) {
+                        JOptionPane.showMessageDialog(secframe, "ID already exists. Please enter a unique ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            try {
+                                String value = (String) perfind2.getSelectedItem();
+                                tutperfind = Integer.parseInt(value);
+                            } catch (NumberFormatException num103) {
+                                JOptionPane.showMessageDialog(perfind2,"Enter correct input!","OK",JOptionPane.WARNING_MESSAGE);
+                            }
+                            
+                            Tutor tut= new Tutor(tutid,tutname,tutadd,tutworkty,tutempsta,tutworkhr,tutsal,tutspec,tutacaqua,tutperfind);
+                            teachers.add(tut);
+    
+                            JOptionPane.showMessageDialog(thirframe, "Registered successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                     catch(NumberFormatException e103){
                         JOptionPane.showMessageDialog(thirframe, "Please enter valid numeric values for ID, working hours, year of experience, graded score, and salary.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
+                
                 }
             }
         });
@@ -897,6 +920,7 @@ public class TeacherGUI{
                             //Searchig for given tutor's id
                             for (Teacher teacher : teachers) {
                                 if (teacher instanceof Tutor) {
+                                    //
                                     Tutor tut = (Tutor) teacher;
                                     if (tut.getTeacherId()==(tutId)) {
                                         tut.set(tutsal,tutperfind);
